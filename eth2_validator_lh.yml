@@ -1,0 +1,29 @@
+version: '3.7'
+services:
+
+  eth2_validator_lh:
+    hostname: eth2_validator_lh
+    container_name: eth2_validator_lh
+    image: sigp/lighthouse:latest-modern
+    restart: always
+    command: |
+      lighthouse validator_client
+      --network prater
+      --enable-doppelganger-protection
+      --validators-dir /root/sbc/validators
+      --beacon-nodes http://charon:3600
+      --suggested-fee-recipient <FEE_RECIPIENT>
+      --graffiti ObolArLine
+    networks:
+      net:
+        ipv4_address: 192.168.32.104
+    volumes:
+      - /home/eth/eth/validator/data:/root/sbc/validators
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    logging:
+      driver: "local"
+
+networks:
+  net:
+    external: true

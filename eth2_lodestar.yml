@@ -1,0 +1,45 @@
+version: "3.7"
+services:
+
+ eth2:
+   container_name: eth2
+   image: chainsafe/lodestar:latest
+   restart: always
+   networks:
+      net:
+        ipv4_address: 192.168.32.102
+   ports:
+     - 9001:9001/tcp # p2p
+     - 9001:9001/udp # p2p
+   expose:
+     - 5052 # rest api
+   volumes:
+     - /home/eth/eth/lodestar/data:/data
+     - /home/eth/eth/lodestar/config:/config
+     - /etc/timezone:/etc/timezone:ro
+     - /etc/localtime:/etc/localtime:ro
+   environment:
+     - NODE_OPTIONS=--max-old-space-size=6144
+   command: |
+     beacon
+     --network=goerli
+     --dataDir=/data
+     --eth1=true
+     --execution.urls=http://192.168.32.101:8551
+     --jwt-secret=/config/jwtsecret.hex
+     --logFile=none
+     --logLevel=info
+     --port=9001
+     --rest=true
+     --rest.address=0.0.0.0
+     --rest.port=5052
+     --rest.cors=*
+     --discv5=true
+     --targetPeers=50
+     --checkpointSyncUrl=https://goerli.beaconstate.ethstaker.cc/
+   logging:
+     driver: "local"
+
+networks:
+  net:
+    external: true

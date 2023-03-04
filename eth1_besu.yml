@@ -1,0 +1,36 @@
+ # Need to start the eth network before running:
+  # sudo docker network create --gateway 192.168.32.1 --subnet 192.168.32.0/24 net
+  # openssl rand -hex 32 | tr -d "\n" > jwtsecret.hex
+
+version: "3.7"
+services:
+
+  eth1:
+    user: 1001:1001
+    hostname: eth1
+    container_name: eth1
+    image: hyperledger/besu:latest
+    restart: always
+    stop_grace_period: 1m
+    networks:
+      net:
+        ipv4_address: 192.168.32.101
+    ports:
+      - "30304:30304/tcp" # p2p
+      - "30304:30304/udp" # p2p
+      - "127.0.0.1:8545:8545" # RPC port
+#      - "127.0.0.1:8546:8546" # websocket port
+#      - "127.0.0.1:8551:8551" # engine RPC port
+    volumes:
+      - /home/eth/eth/besu/config:/config
+      - /home/eth/eth/besu/data:/data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - BESU_CONFIG_FILE=/config/config.toml
+    logging:
+      driver: "local"
+
+networks:
+  net:
+    external: true

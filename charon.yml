@@ -1,0 +1,40 @@
+version: "3.7"
+services:
+
+## charon - Obol DV Client
+  charon:
+    user: 1001:1001
+    hostname: charon
+    container_name: charon
+    image: obolnetwork/charon:latest
+    restart: always
+    stop_grace_period: 1m
+    networks:
+      net:
+        ipv4_address: 192.168.32.103
+    ports:
+      - 3610:3610/tcp       # P2P TCP libp2p
+      - 3630:3630/udp       # P2P UDP discv5
+    volumes:
+      - /home/eth/eth/charon/.charon:/opt/charon/.charon
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - CHARON_BEACON_NODE_ENDPOINTS=http://eth2:5052
+      - CHARON_LOG_LEVEL=info
+      - CHARON_LOG_FORMAT=console
+      - CHARON_P2P_RELAYS=https://0.relay.obol.tech/enr,http://bootnode.lb.gcp.obol.tech:3640/enr
+      - CHARON_P2P_EXTERNAL_HOSTNAME= # Empty default required to avoid warnings.
+      - CHARON_P2P_EXTERNAL_IP=<WAN_IP>
+      - CHARON_P2P_TCP_ADDRESS=0.0.0.0:3610
+      - CHARON_P2P_UDP_ADDRESS=0.0.0.0:3630
+      - CHARON_P2P_ALLOWLIST=*
+      - CHARON_VALIDATOR_API_ADDRESS=0.0.0.0:3600
+      - CHARON_MONITORING_ADDRESS=0.0.0.0:3620
+      - CHARON_BUILDER_API=true
+    healthcheck:
+      test: wget -qO- http://localhost:3620/readyz
+
+networks:
+  net:
+    external: true

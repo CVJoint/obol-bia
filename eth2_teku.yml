@@ -1,0 +1,33 @@
+version: "3.7"
+
+x-logging: &logging
+  logging:
+    driver: "local"
+
+services:
+  eth2:
+    user: "1001"
+    hostname: eth2
+    container_name: eth2
+    image: consensys/teku:latest
+    restart: always
+    networks:
+      net:
+        ipv4_address: 192.168.32.102
+    ports:
+      - 9001:9001 # p2p
+#      - 5051:5051 # metrics
+      - 127.0.0.1:5052:5052 # rest api
+    volumes:
+      - /home/eth/eth/teku/config:/config
+      - /home/eth/eth/teku/data:/data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - JAVA_OPTS=-Xmx4g
+      - TEKU_CONFIG_FILE=/config/config.yml
+    <<: *logging
+
+networks:
+  net:
+    external: true

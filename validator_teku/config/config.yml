@@ -1,0 +1,19 @@
+network: "prater"
+
+beacon-node-api-endpoint: "http://charon:3600"
+data-validator-path: "/data"
+
+validators-proposer-config: "http://charon:3600/teku_proposer_config"
+
+logging: "INFO" #OFF, FATAL, ERROR, WARN, INFO, DEBUG, TRACE, ALL
+log-destination: "CONSOLE"
+
+metrics-enabled: true
+metrics-host-allowlist: ["eth2_validator",]
+metrics-port: 9100
+
+validator-keys: "/data/validator/keys:/data/validator/passwords"
+validators-proposer-default-fee-recipient: "<FEE_RECIPIENT>"
+validators-keystore-locking-enabled: false
+validators-graffiti: "Obol Distributed Validator"
+#validators-graffiti-file: "/data/validator/graffiti.txt"

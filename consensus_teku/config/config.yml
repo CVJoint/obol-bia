@@ -1,0 +1,32 @@
+network: "prater"
+
+data-base-path: "/data"
+data-storage-mode: "prune"
+
+eth1-deposit-contract-max-request-size: 8000
+ee-endpoint: "http://eth1:8551"
+ee-jwt-secret-file: "/config/jwtsecret.hex"
+
+initial-state: "https://goerli.beaconstate.ethstaker.cc/eth/v2/debug/beacon/states/finalized"
+
+logging: "INFO" #OFF, FATAL, ERROR, WARN, INFO, DEBUG, TRACE, ALL
+log-destination: "CONSOLE"
+
+metrics-enabled: true
+metrics-host-allowlist: ["eth2",]
+metrics-port: 9100
+
+p2p-enabled: true
+p2p-port: 9001
+p2p-peer-lower-bound: 64
+p2p-peer-upper-bound: 74
+
+rest-api-enabled: true
+rest-api-host-allowlist: ["eth2", "192.168.32.102"]
+rest-api-interface: "0.0.0.0"
+rest-api-port: 5052
+
+validator-keys: "/data/validator/keys:/data/validator/passwords"
+validators-proposer-default-fee-recipient: "<FEE_RECIPIENT>"
+validators-keystore-locking-enabled: false
+#validators-graffiti-file: "/data/validator/graffiti.txt"
